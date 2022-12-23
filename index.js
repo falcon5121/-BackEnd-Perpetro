@@ -3,21 +3,39 @@ const bodyParser = require('body-parser')
 const postagens = require('./rotas/postagens')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const login = require('./rotas/login')
 
-const DB_PASS = encodeURIComponent('6r99nmqNBxk2LwTj')
+
+const DB_PASS = encodeURIComponent('ZWcGohgoohKvMZTR')
 
 
 const app = express()
+
 
 app.use(
     express.urlencoded({
         extended:true,
     }),
-)
+).use(cors({
+    origin: 'http://localhost:5173', 
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    credentials: true,
+    optionsSuccessStatus: 200
+}))
+
+app.set('view engine', 'ejs')
+app.set('views', './views')
+
+app.set("trust proxy", 1)
 
 app.use(express.json())
 
+app.use("/login", login)
+
 app.use("/postagens", postagens)
+
+
     // app.use(bodyParser.json())
     //     .use(cors({
     //         origin:'*'

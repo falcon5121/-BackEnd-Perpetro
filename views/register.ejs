@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styleRegister/style.css">
+    <title>Registrar Usuário</title>
+</head>
+
+<body>
+    <div>
+        <h1>Registre-se</h1>
+        <form action="/login/register" method="post">
+            <input type="text" placeholder="user" name="user"/>
+            <input type="password" placeholder="password" name="pass"/>
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+    
+
+</body>
+<style>
+    body {
+        display: flex; 
+        justify-content: center;
+        align-items: center;
+    }
+
+    div{
+        background-color: red;
+        width: 300px; 
+        height: 400px; 
+        border-radius: 2rem;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    input{
+        margin-inline: auto;
+        display: flex;
+        margin-bottom: 1rem;
+        padding-block: 0.3rem;
+        padding-inline: 1rem;
+        border-radius: 0.5rem;
+        border: solid 1px black;
+        outline: none;
+    }
+
+    button {
+        
+        display: flex;
+        margin: auto;
+    }
+</style>
+</html>
