@@ -4,12 +4,16 @@ const postagens = require('./rotas/postagens')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const login = require('./rotas/login')
-
+const rawBody = require('raw-body')
+const contentType = require('content-type')
 
 const DB_PASS = encodeURIComponent('ZWcGohgoohKvMZTR')
 
 
 const app = express()
+
+
+
 
 
 app.use(
@@ -24,6 +28,19 @@ app.use(
     optionsSuccessStatus: 200
 }))
 
+app.use(function (req, res, next) {
+  rawBody(req, {
+    length: req.headers['content-length'],
+    limit: '50mb',
+    encoding: contentType.parse(req).parameters.charset
+  }, function (err, string) {
+  if (err) return next(err)
+  req.text = string
+  next()
+  }
+)})
+
+
 app.set('view engine', 'ejs')
 app.set('views', './views')
 
@@ -35,27 +52,13 @@ app.use("/login", login)
 
 app.use("/postagens", postagens)
 
-
-    // app.use(bodyParser.json())
-    //     .use(cors({
-    //         origin:'*'
-    //     }))
-    //     .use(bodyParser.urlencoded({extended:false}))
-    //     .get('/', (req,res) => {
-    //         res.send('funcionando')
-    //         })
-    // .use('/api', rotas)
-    // .use(express.static(__dirname + '../FrontEnd/FrontEnd PerPetro/'))
-    // .listen(3001, () => {
-    //     console.log('server running on http:/localhost:3001')
-    // })
-    
-
 app.get('/', (req,res) => {
     res.send('Funcionando...')
 })
 
-mongoose.connect(`mongodb+srv://fxemanuel:${DB_PASS}@perpetrodb.tillkcv.mongodb.net/Postagens?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://fxemanuel:${DB_PASS}@perpetrodb.tillkcv.mongodb.net/Postagens?retryWrites=true&w=majority`, {
+    useNewUrlParser: true, useUnifiedTopology: true
+})
 .then(() => {
     console.log('Conectamos ao MongoDB Com sucesso!')
     app.listen(3001)

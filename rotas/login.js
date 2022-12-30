@@ -1,6 +1,4 @@
 
-
-
 const router = require('express').Router()
 const session = require('express-session')
 const cors = require('cors')
@@ -10,9 +8,19 @@ const Posts = require('../models/Posts')
 const Users = require('../models/Users')
 const MongoDBSession = require('connect-mongodb-session')(session)
 const bcrypt = require('bcrypt')
+const fs = require('fs')
+const path = require('path')
+require('dotenv/config')
+const express = require('express')
+
+
+router.use(bodyParser.urlencoded({
+    extended: false
+}))
 
 const mongoURI = 'mongodb+srv://fxemanuel:ZWcGohgoohKvMZTR@perpetrodb.tillkcv.mongodb.net/Postagens?retryWrites=true&w=majority'
 
+// const upload = require('../middleware/upload').upload
 
 const store = new MongoDBSession({
     uri: mongoURI,
@@ -26,10 +34,7 @@ router.use(session({
     store: store
 }))
 
-
 router.use(bodyParser.urlencoded({extended: true}))
-
-
 
 router.post('/' , async (req,res) => {
     const {username, password} = req.body
@@ -50,6 +55,7 @@ router.post('/' , async (req,res) => {
 
         req.session.isAuth = true
         req.session.user = username
+        req.session.img = result.Img
         res.send('')
 
 })
@@ -62,8 +68,7 @@ router.post('/' , async (req,res) => {
 
 
 router.get('/', (req,res) => {
-    console.log(req.session.isAuth)
-    res.send(req.session.isAuth)
+    res.send(req.session)
 })
 
 router.get('/deslogar', (req,res) => {
@@ -77,9 +82,35 @@ router.get('/register',(req, res) => {
     res.render('register')
 })
 
-router.post('/register',async (req, res) => {
+
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+        cb(null, path.join('./rotas/uploads'))
+    },
+    filename: (req,file,cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+const upload = multer({ storage: storage})
+
+
+router.post('/register',upload.single('image'), async (req, res) => {
     
-    const {user, pass, img} = req.body
+    const {user, pass, img } = req.body
+
+    const content = {
+        name: user,
+        pass: pass,
+        img: {
+            data: fs.readFileSync(path.join('./rotas/uploads/' + req.file.filename)),
+            contentType: 'image/jpeg'
+        }
+    }
+
+
 
     if(!pass == '') {
         await Users.exists({Username: user}, async (err, result) => {
@@ -87,7 +118,7 @@ router.post('/register',async (req, res) => {
                 res.redirect('/login/register')
             } else {
                 const hashedPsw = await bcrypt.hash(pass, 12)
-                await Users.create({Username: user, Password: hashedPsw})
+                await Users.create({Username: user, Password: hashedPsw, Img:content.img})
                 res.status(201).json({message: 'Usuário criado com sucesso'})
             }
         })
@@ -97,5 +128,9 @@ router.post('/register',async (req, res) => {
 
 })
 
+
+router.put('/updateImg', async (req,res) => {
+  console.log(req.body)
+})
 
 module.exports = router
