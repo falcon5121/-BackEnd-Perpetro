@@ -1,66 +1,60 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const postagens = require('./rotas/postagens')
-const cors = require('cors')
-const mongoose = require('mongoose')
-const login = require('./rotas/login')
-const rawBody = require('raw-body')
-const contentType = require('content-type')
+const express = require("express");
 
-const DB_PASS = encodeURIComponent('ZWcGohgoohKvMZTR')
+const postagens = require("./rotas/postagens");
+const cors = require("cors");
+const mongoose = require("mongoose");
 
+require("dotenv").config();
 
-const app = express()
+const publicLogin = require("./routes/publicRoutes/login");
+const publicRegister = require("./routes/publicRoutes/register");
+const privateRoutes = require("./routes/privateRoutes/privateRoutes");
 
+const app = express();
 
-
-
-
-app.use(
+app
+  .use(
     express.urlencoded({
-        extended:true,
-    }),
-).use(cors({
-    origin: 'http://localhost:5173', 
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    credentials: true,
-    optionsSuccessStatus: 200
-}))
+      extended: true,
+      limit: "50mb",
+    })
+  )
+  .use(
+    cors({
+      origin: "http://localhost:5173",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      preflightContinue: false,
+      credentials: true,
+      optionsSuccessStatus: 200,
+    })
+  )
+  .use(express.json({ limit: "50mb" }));
 
-app.use(function (req, res, next) {
-  rawBody(req, {
-    length: req.headers['content-length'],
-    limit: '50mb',
-    encoding: contentType.parse(req).parameters.charset
-  }, function (err, string) {
-  if (err) return next(err)
-  req.text = string
-  next()
-  }
-)})
+app.set("view engine", "ejs").set("views", "./views").set("trust proxy", 1);
 
+app
+  .use(express.json())
+  .use("/postagens", postagens)
+  .use("/login", publicLogin)
+  .use("/register", publicRegister);
+// app.use(privateRoutes);
 
-app.set('view engine', 'ejs')
-app.set('views', './views')
+app.get("/", (req, res) => {
+  res.send("Funcionando...");
+});
 
-app.set("trust proxy", 1)
-
-app.use(express.json())
-
-app.use("/login", login)
-
-app.use("/postagens", postagens)
-
-app.get('/', (req,res) => {
-    res.send('Funcionando...')
-})
-
-mongoose.connect(`mongodb+srv://fxemanuel:${DB_PASS}@perpetrodb.tillkcv.mongodb.net/Postagens?retryWrites=true&w=majority`, {
-    useNewUrlParser: true, useUnifiedTopology: true
-})
-.then(() => {
-    console.log('Conectamos ao MongoDB Com sucesso!')
-    app.listen(3001)
-})
-.catch((err) => console.log(err))
+mongoose
+  .connect(
+    `mongodb+srv://fxemanuel:${encodeURIComponent(
+      process.env.MONGOPASS_KEY
+    )}@perpetrodb.tillkcv.mongodb.net/Postagens?retryWrites=true&w=majority`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    console.log("Conectamos ao MongoDB Com sucesso!");
+    app.listen(3001);
+  })
+  .catch((err) => console.log(err));

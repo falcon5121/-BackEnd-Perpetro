@@ -1,64 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styleRegister/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styleRegister/style.css" />
     <title>Registrar Usuário</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div>
-        <h1>Registre-se</h1>
-        <form action="/login/register" method="post" enctype="multipart/form-data">
-            <input type="text" placeholder="user" name="user" required/>
-            <input type="password" placeholder="password" name="pass" required/>
-            <input type="file" accept="image/png, image/jpg, image/jpeg" name="image"/>
-            <button type="submit">Registrar</button>
-        </form>
+      <h1>Registre-se</h1>
+      <form action="/register" method="post" enctype="multipart/form-data">
+        <input type="text" placeholder="user" name="user" required />
+        <input type="password" placeholder="password" name="pass" required />
+        <button type="submit">Registrar</button>
+      </form>
     </div>
-    
+  </body>
 
-</body>
-<style>
+  <style>
     body {
-        display: flex; 
-        justify-content: center;
-        align-items: center;
-        background-color: #272844;
-        font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #272844;
+      font-family: Arial;
     }
 
-    div{
-        background-color: #f1b133;
-        width: 300px; 
-        height: 400px; 
-        border-radius: 0.6rem;
+    div {
+      background-color: #f1b133;
+      width: 300px;
+      height: 400px;
+      border-radius: 0.6rem;
     }
 
     h1 {
-        text-align: center;
+      text-align: center;
     }
 
-    input{
-        margin-inline: auto;
-        display: flex;
-        margin-bottom: 1rem;
-        padding-block: 0.3rem;
-        padding-inline: 1rem;
-        border-radius: 0.3rem;
-        border: solid 1px black;
-        outline: none;
+    input {
+      margin-inline: auto;
+      display: flex;
+      margin-bottom: 1rem;
+      padding-block: 0.3rem;
+      padding-inline: 1rem;
+      border-radius: 0.3rem;
+      border: solid 1px black;
+      outline: none;
     }
     input:nth-child(3) {
-        border: none;
+      border: none;
     }
 
     button {
-        
-        display: flex;
-        margin: auto;
+      display: flex;
+      margin: auto;
     }
-</style>
+  </style>
 </html>

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // const Post = mongoose.model('Post', {
 //     Title: String,
@@ -8,20 +8,16 @@ const mongoose = require('mongoose')
 // })
 
 const Post = new mongoose.Schema({
-    tittle: {
-        type: String,
-        required: true
-    },
-    subTittle: {
-        type: String,
-    },
-    content: 'mixed',
-    date: {
-        type: Date,
-        default: Date.now
-    }
-})
+  tittle: {
+    type: String,
+    required: true,
+  },
+  subTittle: {
+    type: String,
+  },
+  content: "mixed",
 
+  date: String,
+});
 
-
-module.exports = Post
+module.exports = Post;
