@@ -43,6 +43,8 @@ app.get("/", (req, res) => {
   res.send("Funcionando...");
 });
 
+const port = process.env.PORT || 3000;
+
 mongoose
   .connect(
     `mongodb+srv://fxemanuel:${encodeURIComponent(
@@ -55,6 +57,6 @@ mongoose
   )
   .then(() => {
     console.log("Conectamos ao MongoDB Com sucesso!");
-    app.listen(3001);
+    app.listen(port);
   })
   .catch((err) => console.log(err));
