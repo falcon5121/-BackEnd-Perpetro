@@ -21,7 +21,7 @@ app
   )
   .use(
     cors({
-      origin: "http://localhost:5173",
+      origin: process.env.SERVER_KEY,
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       preflightContinue: false,
       credentials: true,
