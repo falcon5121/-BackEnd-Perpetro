@@ -21,7 +21,7 @@ app
   )
   .use(
     cors({
-      origin: process.env.SERVER_KEY,
+      origin: "https://main--vermillion-monstera-6ce323.netlify.app/",
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       preflightContinue: false,
       credentials: true,
